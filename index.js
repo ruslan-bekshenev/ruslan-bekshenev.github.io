@@ -1,66 +1,26 @@
-// надписи и цвета на секторах
-const prizes = [
-    {
-        text: "Пить смотреть кинчик",
-        color: "#06283D",
-    },
-    {
-        text: "Пить и играть в настолки",
-        color: "hsl(173 58% 39%)",
-    },
-    {
-        text: "Пить и смотреть аниме",
-        color: "hsl(43 74% 66%)",
-    },
-    {
-        text: "Пить, приготовить кисадилью",
-        color: "hsl(27 87% 67%)",
-    },
-    {
-        text: "Просто пить",
-        color: "hsl(21 64% 67%)",
-    },
-    {
-        text: "Пустить все на самотек",
-        color: "rgb(110 0 0)",
-    },
-];
+const prizes = []
 
-// создаём переменные для быстрого доступа ко всем объектам на странице — блоку в целом, колесу, кнопке и язычку
 const wheel = document.querySelector(".deal-wheel");
 const spinner = wheel.querySelector(".spinner");
 const trigger = wheel.querySelector(".btn-spin");
 const ticker = wheel.querySelector(".ticker");
 
-// на сколько секторов нарезаем круг
 const prizeSlice = 360 / prizes.length;
-// на какое расстояние смещаем сектора друг относительно друга
 const prizeOffset = Math.floor(180 / prizes.length);
-// прописываем CSS-классы, которые будем добавлять и убирать из стилей
 const spinClass = "is-spinning";
 const selectedClass = "selected";
-// получаем все значения параметров стилей у секторов
 const spinnerStyles = window.getComputedStyle(spinner);
 
-// переменная для анимации
 let tickerAnim;
-// угол вращения
 let rotation = 0;
-// текущий сектор
 let currentSlice = 0;
-// переменная для текстовых подписей
 let prizeNodes;
 
-// расставляем текст по секторам
 const createPrizeNodes = () => {
-    // обрабатываем каждую подпись
     prizes.forEach(({ text, color, reaction }, i) => {
-        // каждой из них назначаем свой угол поворота
         const rotation = ((prizeSlice * i) * -1) - prizeOffset;
-        // добавляем код с размещением текста на страницу в конец блока spinner
         spinner.insertAdjacentHTML(
             "beforeend",
-            // текст при этом уже оформлен нужными стилями
             `<li class="prize" data-reaction=${reaction} style="--rotate: ${rotation}deg">
         <span class="text">${text}</span>
       </li>`
@@ -68,9 +28,7 @@ const createPrizeNodes = () => {
     });
 };
 
-// рисуем разноцветные секторы
 const createConicGradient = () => {
-    // устанавливаем нужное значение стиля у элемента spinner
     spinner.setAttribute(
         "style",
         `background: conic-gradient(
@@ -84,13 +42,9 @@ const createConicGradient = () => {
     );
 };
 
-// создаём функцию, которая нарисует колесо в сборе
 const setupWheel = () => {
-    // сначала секторы
     createConicGradient();
-    // потом текст
     createPrizeNodes();
-    // а потом мы получим список всех призов на странице, чтобы работать с ними как с объектами
     prizeNodes = wheel.querySelectorAll(".prize");
 };
 
